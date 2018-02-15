@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Video Player</title>
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script" rel="stylesheet">
+    <style>
+        body {
+          margin: 0; 
+          background: #811e1e;
+          font-family: 'Nanum Pen Script', cursive;
+          overflow: hidden;
+        }
+  
+        .banner {
+          position: relative;
+          width: 100vw;
+          height: 600px;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-image: url('images/video-background.png');
+        }
+  
+        .title {
+          z-index: 10;
+          position: absolute;
+          margin: 0 auto;
+          width: 100%;
+          text-align: center;
+          font-size: 140px;
+          color: wheat;
+        }
+  
+        .title-highlight {
+          background-color: #811e1e;
+          border-radius: 50%;
+          padding: 0px 20px;
+        }
+  
+        .video-container {
+          opacity: 0.5;
+          width: 100%;
+          height: 100%;
+          position: relative;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+  
+        .videos-container {
+          display: flex;
+          flex-wrap: wrap;
+        }
+  
+        .video-wrapper {
+          flex: 1;
+          margin: 20px;
+          height: 400px;
+          overflow: hidden;
+        }
+  
+        .video-banner {
+          position: absolute;
+        }
+        
+        .video {
+          transform: scale(2.3);
+        }
+      </style>
+</head>
+
+<body>
+    <div class="banner">
+      <div class="video-container">
+        <video 
+        width="100%" 
+        height="auto" 
+        autoplay 
+        loop 
+        muted
+        class="video-banner"
+        >
+          <source src="videos/intro2.mp4" type="video/mp4"> 
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <h1 class="title">
+        Beats
+        <span class="title-highlight">fm</span>
+      </h1>
+    </div>
+
+    <div id="videos-container" class="videos-container">
+      <div class="video-wrapper">
+        <video class="video" width="100%" height="auto" muted>
+          <source src="videos/work.mp4" type="video/mp4"> Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <div class="video-wrapper">
+        <video class="video" width="100%" height="auto" muted>
+          <source src="videos/intro.mp4" type="video/mp4"> Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <div class="video-wrapper">
+        <video class="video" width="100%" height="auto" muted >
+          <source src="videos/meant_to_be.mp4" type="video/mp4"> Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+
+
+  <script type="text/javascript">
+    let videos = document.querySelectorAll(".video");
+
+    // console.log(videos);
+
+    videos.forEach(video => {
+      playVideoTeaserFrom(video, 1, 2);
+
+      video.onmouseover = () => playVideo(video);
+      video.onmouseleave = () => pauseVideo(video);
+      video.onclick = () => playAndExpand(video);
+
+    });
+
+    function playAndExpand(video) {
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.mozRequestFullScreen) {
+        video.mozRequestFullScreen();
+      } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen();
+      }
+      video.muted = false;
+      video.volume = 0.8;
+      return video.play();
+    }
+
+    function playVideo(video) {
+      if (document.fullscreenElement) {
+        document.fullscreenElement.muted = false;
+        document.fullscreenElement.play();
+      }
+      if (document.webkitFullscreenElement) {
+        document.webkitFullscreenElement.muted = false;
+        document.webkitFullscreenElement.play();
+      }
+      if (document.mozFullScreenElement) {
+        document.mozFullScreenElement.muted = false;
+        document.mozFullScreenElement.play();
+      }
+      if (document.msFullscreenElement) {
+        document.msFullscreenElement.muted = false;
+        document.msFullscreenElement.play();
+      }
+      else {
+        video.muted = true;
+        video.play();
+      }
+    }
+
+    function pauseVideo(video) {
+      video.pause();
+    }
+
+    function playVideoTeaserFrom(video, startTime, endTime) {
+      video.currentTime = startTime; //not sure if player seeks to seconds or milliseconds
+      video.play();
+
+      //call function to stop player after given intervall
+      var stopVideoAfter = (endTime - startTime) * 1000;  //* 1000, because Timer is in ms
+      setTimeout(function () {
+        video.pause();
+      }, stopVideoAfter);
+    }
+
+  </script>
+  </body>
+</html>
